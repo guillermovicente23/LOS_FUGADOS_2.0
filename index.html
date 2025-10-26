@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora UMG - Proyecto Final Pre-Cálculo</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <script>
+        // Configuración de MathJax
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <style>
+        body { 
+            font-family: 'Space Mono', monospace; 
+            background-color: #1a1a2e; /* Deep Purple-Blue */
+            color: #e5e5f7; /* Off-White/Light Gray */
+        }
+        
+        /* Contenedor principal y tarjetas */
+        .neon-card {
+            background-color: #272744; /* Slightly lighter dark blue */
+            box-shadow: 0 0 15px rgba(103, 58, 183, 0.5); /* Purple glow */
+            border: 1px solid #673ab7;
+        }
+
+        /* Bloque de Información Académica (Simulación de Terminal) */
+        .info-block {
+            background-color: #0d0d1a; /* Darkest Blue/Black */
+            border-left: 5px solid #00ff88; /* Neon Green Accent */
+            color: #00ff88; /* Neon Green Text */
+            padding: 1rem;
+            white-space: pre-wrap; /* Mantiene los saltos de línea */
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Estilos de inputs y botones (manteniendo el tema NeonTech) */
+        .input-field {
+            padding: 12px; border: 2px solid #5d5d81; border-radius: 4px; background-color: #1a1a2e;
+            color: #00ff88; font-weight: 700; outline: none;
+        }
+        .input-field:focus {
+            border-color: #00ff88; box-shadow: 0 0 8px rgba(0, 255, 136, 0.7); 
+        }
+        .neon-button {
+            background-color: #8800ff; color: #ffffff; font-weight: 700; border-radius: 4px;
+            box-shadow: 0 0 5px rgba(136, 0, 255, 0.7); transition: all 0.15s ease-in-out;
+        }
+        .neon-button:hover {
+            background-color: #ff00ff; transform: translateY(-2px); box-shadow: 0 0 15px rgba(255, 0, 255, 0.9);
+        }
+        #stepsDisplay li {
+            background-color: #1a1a2e; border-left: 4px solid #00ff88; padding: 10px 15px; margin-bottom: 8px;
+            font-size: 0.95rem; border-radius: 4px;
+        }
+        .step-formula { font-weight: 700; color: #ff00ff; }
+        .result-box { background-color: #00ff881a; border: 1px solid #00ff88; }
+        #errorBox { background-color: #ff00001a; border-left-color: #ff0000 !important; color: #ff0000; box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
+    </style>
+</head>
+<body class="min-h-screen p-4 sm:p-8">
+
+    <div class="max-w-3xl mx-auto space-y-8">
+
+        <div class="info-block rounded-lg shadow-xl">
+            Universidad Mariano Gálvez Retalhuleu
+            Pre-Cálculo
+            Inge. Bruno García
+            
+            ---------------------------
+            Proyecto Final - Pre-Cálculo
+            ---------------------------
+            
+            Estudiantes:
+            
+            [2790-25-23487] Ericsson Willian Valencia (Plan Diario)
+            [2790-25-27156] Juan José De León Guzmán (Plan Diario)
+            [2790-23-23886] Sharon Ludwhyka Alvarado Meneses (Plan Diario)
+            [2790-25-11982] Guillermo Antonio Vicente Alonzo (Plan Diario)
+        </div>
+        <header class="text-center pt-6 pb-4 neon-card rounded-lg border-b-4 border-white-300">
+            <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
+                // LOS FUGADOS 2.0
+            </h1>
+            <p class="mt-1 text-gray-400">
+                Aproximación por Terminal Cuántica
+            </p>
+        </header>
+
+        <section class="p-6 rounded-lg shadow-xl neon-card">
+            
+            <div class="mb-5 p-4 rounded-md border border-purple-600 bg-purple-900/20">
+                <h3 class="text-lg font-semibold mb-3 text-purple-400">Z₁ (Input A+Bi)</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="number" id="a_real" placeholder="Real (A)" value="2" class="input-field">
+                    <input type="number" id="b_imag" placeholder="Imaginaria (B)" value="3" class="input-field">
+                </div>
+            </div>
+
+            <div class="mb-6 p-4 rounded-md border border-blue-600 bg-blue-900/20">
+                <h3 class="text-lg font-semibold mb-3 text-blue-400">Z₂ (Input C+Di)</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="number" id="c_real" placeholder="Real (C)" value="4" class="input-field">
+                    <input type="number" id="d_imag" placeholder="Imaginaria (D)" value="1" class="input-field">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-4 gap-3 mb-8">
+                <button onclick="calculateComplexWithSteps('add')" class="py-2 neon-button">ADD [Z1+Z2]</button>
+                <button onclick="calculateComplexWithSteps('subtract')" class="py-2 neon-button">SUB [Z1-Z2]</button>
+                <button onclick="calculateComplexWithSteps('multiply')" class="py-2 neon-button">MUL [Z1*Z2]</button>
+                <button onclick="calculateComplexWithSteps('divide')" class="py-2 neon-button">DIV [Z1/Z2]</button>
+            </div>
+
+            <div class="p-4 rounded-md result-box mb-6">
+                <h3 class="text-xl font-bold text-green-400 mb-2">✅ Resultado | Output:</h3>
+                <p id="resultDisplay" class="text-3xl font-mono text-white font-semibold">
+                    </p>
+            </div>
+            
+            <div class="p-4 rounded-md neon-card border-none">
+                <h3 class="text-xl font-bold text-green-400 mb-3 border-b border-gray-700 pb-2">📋 Procedimiento | Log:</h3>
+                <div id="stepsDisplay" class="text-gray-300">
+                    <p class="text-gray-500">Esperando ejecución...</p>
+                </div>
+            </div>
+
+            <div id="errorBox" class="mt-4 p-3 rounded-md hidden font-medium border-l-4"></div>
+        </section>
+
+        <footer class="text-center py-4 text-gray-500 text-sm">
+            <p>Developed with passion for the digital frontier. 2025.</p>
+        </footer>
+    </div>
+    
+    <script>
+        
+        // Función auxiliar para formatear el número complejo
+        function formatComplex(real, imag) {
+            const r = parseFloat(real.toFixed(4));
+            const i = parseFloat(imag.toFixed(4));
+
+            if (r === 0 && i === 0) return '0';
+            if (i === 0) return r.toString();
+
+            let str = r === 0 ? '' : r.toString();
+            const absI = Math.abs(i);
+            const sign = i > 0 ? (r === 0 ? '' : ' + ') : ' - ';
+            
+            let imagPart = (absI === 1) ? 'i' : absI.toString() + 'i';
+
+            if (r === 0) {
+                return (i < 0 ? '-' : '') + imagPart;
+            } else {
+                return str + sign + imagPart;
+            }
+        }
+
+        // *** FUNCIÓN DE RENDERIZADO ESTABLE Y FINAL ***
+        function renderMathJax() {
+            const stepsDisplay = document.getElementById('stepsDisplay');
+            const errorBox = document.getElementById('errorBox');
+            
+            // Usamos setTimeout para dar un margen de tiempo seguro a MathJax para que termine su inicialización.
+            setTimeout(() => {
+                if (window.MathJax && typeof MathJax.typeset === 'function') {
+                    try {
+                        // MathJax.typeset() es la versión síncrona, estable para entornos locales.
+                        MathJax.typeset([stepsDisplay]); 
+                        errorBox.classList.add('hidden');
+                    } catch (e) {
+                        console.error("MathJax Render Error:", e);
+                        errorBox.textContent = "Error interno: Fallo al renderizar el código de la fórmula. (Check Console)";
+                        errorBox.classList.remove('hidden');
+                    }
+                } else {
+                    console.error("MathJax Library Load Failed.");
+                    errorBox.textContent = "Error CRÍTICO: MathJax no se cargó. Asegúrate de tener conexión a Internet.";
+                    errorBox.classList.remove('hidden');
+                }
+            }, 300); // 300ms es el margen de seguridad.
+        }
+
+        // Función principal de cálculo
+        function calculateComplexWithSteps(operation) {
+            const a = parseFloat(document.getElementById('a_real').value) || 0;
+            const b = parseFloat(document.getElementById('b_imag').value) || 0;
+            const c = parseFloat(document.getElementById('c_real').value) || 0;
+            const d = parseFloat(document.getElementById('d_imag').value) || 0;
+
+            const Z1_str = formatComplex(a, b);
+            const Z2_str = formatComplex(c, d);
+
+            const resultDisplay = document.getElementById('resultDisplay');
+            const stepsDisplay = document.getElementById('stepsDisplay');
+            const errorBox = document.getElementById('errorBox');
+            
+            errorBox.classList.add('hidden');
+            let stepsHTML = '<ul>';
+            let resultReal, resultImag;
+
+            try {
+                // Lógica de cálculo 
+                switch (operation) {
+                    case 'add':
+                        stepsHTML += '<li><span class="step-formula">Fórmula:</span> $$(a+bi)+(c+di)=(a+c)+(b+d)i$$</li>';
+                        stepsHTML += `<li><span class="step-formula">Reemplazando:</span> $$(${Z1_str}) + (${Z2_str}) = (${a} + ${c}) + (${b} + ${d})i$$</li>`;
+                        resultReal = a + c;
+                        resultImag = b + d;
+                        stepsHTML += `<li><span class="step-formula">Calculando:</span> Reales: $${a} + ${c} = ${resultReal}$. Imaginarios: $${b} + ${d} = ${resultImag}$.</li>`;
+                        break;
+                    case 'subtract':
+                         stepsHTML += '<li><span class="step-formula">Fórmula:</span> $$(a+bi)-(c+di)=(a-c)+(b-d)i$$</li>';
+                         stepsHTML += `<li><span class="step-formula">Reemplazando:</span> $$(${Z1_str}) - (${Z2_str}) = (${a} - ${c}) + (${b} - ${d})i$$</li>`;
+                         resultReal = a - c;
+                         resultImag = b - d;
+                         stepsHTML += `<li><span class="step-formula">Calculando:</span> Reales: $${a} - ${c} = ${resultReal}$. Imaginarios: $${b} - ${d} = ${resultImag}$.</li>`;
+                         break;
+                    case 'multiply':
+                        stepsHTML += '<li><span class="step-formula">Fórmula:</span> $$(a+bi)(c+di) = (ac-bd)+(ad+bc)i$$</li>';
+                        stepsHTML += `<li><span class="step-formula">Reemplazando:</span> $$(${a} \\times ${c} - ${b} \\times ${d}) + (${a} \\times ${d} + ${b} \\times ${c})i$$</li>`;
+                        resultReal = (a * c) - (b * d);
+                        resultImag = (a * d) + (b * c);
+                        stepsHTML += `<li><span class="step-formula">Cálculo Real:</span> $${a*c} - ${b*d} = ${resultReal}$</li>`;
+                        stepsHTML += `<li><span class="step-formula">Cálculo Imaginario:</span> $${a*d} + ${b*c} = ${resultImag}$</li>`;
+                        break;
+                    case 'divide':
+                        const denominator = (c * c) + (d * d);
+                        if (denominator === 0) { throw new Error("División por cero. El denominador (Z2) es 0."); }
+                        stepsHTML += '<li><span class="step-formula">Estrategia:</span> Multiplicar por el conjugado ($c-di$).</li>';
+                        stepsHTML += `<li><span class="step-formula">Denominador:</span> $$c^2 + d^2 = ${c}^2 + ${d}^2 = ${denominator}$$</li>`;
+                        const numReal = (a * c) + (b * d);
+                        const numImag = (b * c) - (a * d);
+                        resultReal = numReal / denominator;
+                        resultImag = numImag / denominator;
+                        stepsHTML += `<li><span class="step-formula">Expresión Fraccionaria:</span> $$\\frac{${numReal} + ${numImag}i}{${denominator}}$$</li>`;
+                        break;
+                    default:
+                        throw new Error("Operación no reconocida.");
+                }
+
+                // Mostrar el resultado final
+                const finalResultString = formatComplex(resultReal, resultImag);
+                resultDisplay.textContent = finalResultString;
+                stepsHTML += `<li><span class="step-formula">Resultado Final:</span> $${finalResultString}$</li>`;
+                stepsHTML += '</ul>';
+
+                // 1. Insertar el código LaTeX
+                stepsDisplay.innerHTML = stepsHTML;
+                // 2. Llamar al renderizado estable (solución al error)
+                renderMathJax(); 
+
+            } catch (e) {
+                errorBox.textContent = 'ERROR EN CÁLCULO: ' + e.message;
+                errorBox.classList.remove('hidden');
+                resultDisplay.textContent = '¡Error en el cálculo!';
+                stepsDisplay.innerHTML = `<p class="text-red-500 font-semibold">${e.message}</p>`;
+            }
+        }
+        
+        // Inicialización: Ejecutar la primera operación al cargar el DOM.
+        document.addEventListener('DOMContentLoaded', () => {
+            calculateComplexWithSteps('add');
+        });
+    </script>
+</body>
+</html>
