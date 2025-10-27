@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     
     <script>
-        // Configuración de MathJax
         MathJax = {
             tex: {
                 inlineMath: [['$', '$'], ['\\(', '\\)']]
@@ -21,29 +20,52 @@
     <style>
         body { 
             font-family: 'Space Mono', monospace; 
-            background-color: #1a1a2e; /* Deep Purple-Blue */
-            color: #e5e5f7; /* Off-White/Light Gray */
+            background-color: #1a1a2e;
+            color: #e5e5f7;
+            
+            /* --- FONDO DE IMAGEN UMG (Marca de Agua) --- */
+            background-image: url('umg (1).png'); 
+            /* AJUSTE: Aumento de tamaño para que se vea más grande */
+            background-size: 110%; 
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        /* Pseudo-elemento para el overlay con opacidad */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* AJUSTE: Opacidad reducida a 0.55 para mayor intensidad del logo */
+            background-color: rgba(26, 26, 46, 0.55); 
+            z-index: -1;
         }
         
-        /* Contenedor principal y tarjetas */
+        /* Contenedores y tarjetas (NeonTech) */
         .neon-card {
-            background-color: #272744; /* Slightly lighter dark blue */
-            box-shadow: 0 0 15px rgba(103, 58, 183, 0.5); /* Purple glow */
+            background-color: #272744;
+            box-shadow: 0 0 15px rgba(136, 0, 255, 0.5);
             border: 1px solid #673ab7;
         }
 
-        /* Bloque de Información Académica (Simulación de Terminal) */
+        /* Bloque de Información Académica */
         .info-block {
-            background-color: #0d0d1a; /* Darkest Blue/Black */
-            border-left: 5px solid #00ff88; /* Neon Green Accent */
-            color: #00ff88; /* Neon Green Text */
-            padding: 1rem;
-            white-space: pre-wrap; /* Mantiene los saltos de línea */
-            font-size: 0.9rem;
-            line-height: 1.5;
+            background-color: #0d0d1a;
+            border-left: 5px solid #00ff88;
+            color: #00ff88;
+            padding: 1.2rem;
+            white-space: pre-wrap;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            font-weight: 500;
         }
 
-        /* Estilos de inputs y botones (manteniendo el tema NeonTech) */
+        /* Estilos de los campos de entrada de texto (Inputs) */
         .input-field {
             padding: 12px; border: 2px solid #5d5d81; border-radius: 4px; background-color: #1a1a2e;
             color: #00ff88; font-weight: 700; outline: none;
@@ -51,20 +73,64 @@
         .input-field:focus {
             border-color: #00ff88; box-shadow: 0 0 8px rgba(0, 255, 136, 0.7); 
         }
+        
+        /* Botones de Operación (Neon Purple) */
         .neon-button {
-            background-color: #8800ff; color: #ffffff; font-weight: 700; border-radius: 4px;
-            box-shadow: 0 0 5px rgba(136, 0, 255, 0.7); transition: all 0.15s ease-in-out;
+            background-color: #8800ff;
+            color: #ffffff;
+            font-weight: 700;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(136, 0, 255, 0.7);
+            transition: all 0.15s ease-in-out;
         }
         .neon-button:hover {
-            background-color: #ff00ff; transform: translateY(-2px); box-shadow: 0 0 15px rgba(255, 0, 255, 0.9);
+            background-color: #ff00ff; 
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.9);
         }
+
+        /* Área de Pasos (Diseño de Terminal) */
+        #stepsDisplay ul { list-style: none; padding-left: 0; margin-top: 10px; }
         #stepsDisplay li {
-            background-color: #1a1a2e; border-left: 4px solid #00ff88; padding: 10px 15px; margin-bottom: 8px;
-            font-size: 0.95rem; border-radius: 4px;
+            background-color: #1a1a2e;
+            border-left: 4px solid #00ff88;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            border-radius: 4px;
         }
-        .step-formula { font-weight: 700; color: #ff00ff; }
-        .result-box { background-color: #00ff881a; border: 1px solid #00ff88; }
-        #errorBox { background-color: #ff00001a; border-left-color: #ff0000 !important; color: #ff0000; box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
+        .step-formula { 
+            font-weight: 700; 
+            color: #ff00ff;
+        }
+        
+        /* Área de Resultado */
+        .result-box {
+            background-color: #00ff881a;
+            border: 1px solid #00ff88;
+            color: #00ff88;
+        }
+        
+        /* Mensaje de Error */
+        #errorBox {
+            background-color: #ff00001a;
+            border-left-color: #ff0000 !important;
+            color: #ff0000;
+            box-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
+        }
+
+        /* Títulos de encabezado y secciones */
+        .header-title {
+            color: #ffffff;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(255, 0, 255, 0.7);
+        }
+        .header-subtitle {
+            color: #5d5d81;
+        }
+        .section-title {
+            color: #ff00ff;
+        }
     </style>
 </head>
 <body class="min-h-screen p-4 sm:p-8">
@@ -87,11 +153,12 @@
             [2790-23-23886] Sharon Ludwhyka Alvarado Meneses (Plan Diario)
             [2790-25-11982] Guillermo Antonio Vicente Alonzo (Plan Diario)
         </div>
-        <header class="text-center pt-6 pb-4 neon-card rounded-lg border-b-4 border-white-300">
-            <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
-                // LOS FUGADOS 2.0
+
+        <header class="text-center pt-6 pb-4 neon-card rounded-lg border-b-4 border-gray-700">
+            <h1 class="header-title font-bold">
+                // NUMEROS COMPLEJOS
             </h1>
-            <p class="mt-1 text-gray-400">
+            <p class="mt-1 header-subtitle">
                 Aproximación por Terminal Cuántica
             </p>
         </header>
@@ -99,7 +166,7 @@
         <section class="p-6 rounded-lg shadow-xl neon-card">
             
             <div class="mb-5 p-4 rounded-md border border-purple-600 bg-purple-900/20">
-                <h3 class="text-lg font-semibold mb-3 text-purple-400">Z₁ (Input A+Bi)</h3>
+                <h3 class="text-lg font-semibold mb-3 section-title">Z₁ (Input A+Bi)</h3>
                 <div class="grid grid-cols-2 gap-4">
                     <input type="number" id="a_real" placeholder="Real (A)" value="2" class="input-field">
                     <input type="number" id="b_imag" placeholder="Imaginaria (B)" value="3" class="input-field">
@@ -107,7 +174,7 @@
             </div>
 
             <div class="mb-6 p-4 rounded-md border border-blue-600 bg-blue-900/20">
-                <h3 class="text-lg font-semibold mb-3 text-blue-400">Z₂ (Input C+Di)</h3>
+                <h3 class="text-lg font-semibold mb-3 section-title">Z₂ (Input C+Di)</h3>
                 <div class="grid grid-cols-2 gap-4">
                     <input type="number" id="c_real" placeholder="Real (C)" value="4" class="input-field">
                     <input type="number" id="d_imag" placeholder="Imaginaria (D)" value="1" class="input-field">
@@ -122,13 +189,13 @@
             </div>
 
             <div class="p-4 rounded-md result-box mb-6">
-                <h3 class="text-xl font-bold text-green-400 mb-2">✅ Resultado | Output:</h3>
-                <p id="resultDisplay" class="text-3xl font-mono text-white font-semibold">
+                <h3 class="text-xl font-bold mb-2">✅ Resultado | Output:</h3>
+                <p id="resultDisplay" class="text-3xl font-mono font-semibold">
                     </p>
             </div>
             
             <div class="p-4 rounded-md neon-card border-none">
-                <h3 class="text-xl font-bold text-green-400 mb-3 border-b border-gray-700 pb-2">📋 Procedimiento | Log:</h3>
+                <h3 class="text-xl font-bold section-title mb-3 border-b border-gray-700 pb-2">📋 Procedimiento | Log:</h3>
                 <div id="stepsDisplay" class="text-gray-300">
                     <p class="text-gray-500">Esperando ejecución...</p>
                 </div>
@@ -137,7 +204,7 @@
             <div id="errorBox" class="mt-4 p-3 rounded-md hidden font-medium border-l-4"></div>
         </section>
 
-        <footer class="text-center py-4 text-gray-500 text-sm">
+        <footer class="text-center py-4 text-gray-600 text-sm">
             <p>Developed with passion for the digital frontier. 2025.</p>
         </footer>
     </div>
@@ -170,11 +237,9 @@
             const stepsDisplay = document.getElementById('stepsDisplay');
             const errorBox = document.getElementById('errorBox');
             
-            // Usamos setTimeout para dar un margen de tiempo seguro a MathJax para que termine su inicialización.
             setTimeout(() => {
                 if (window.MathJax && typeof MathJax.typeset === 'function') {
                     try {
-                        // MathJax.typeset() es la versión síncrona, estable para entornos locales.
                         MathJax.typeset([stepsDisplay]); 
                         errorBox.classList.add('hidden');
                     } catch (e) {
@@ -187,7 +252,7 @@
                     errorBox.textContent = "Error CRÍTICO: MathJax no se cargó. Asegúrate de tener conexión a Internet.";
                     errorBox.classList.remove('hidden');
                 }
-            }, 300); // 300ms es el margen de seguridad.
+            }, 300);
         }
 
         // Función principal de cálculo
@@ -270,7 +335,7 @@
         // Inicialización: Ejecutar la primera operación al cargar el DOM.
         document.addEventListener('DOMContentLoaded', () => {
             calculateComplexWithSteps('add');
-        });
+            });
     </script>
 </body>
 </html>
